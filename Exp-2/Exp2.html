@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechNexus 2025 | Event Registration</title>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>TechNexus 2026</h1>
+    <p>The Ultimate Web Technology Symposium</p>
+</header>
+
+<div class="container">
+    <section class="promo-section">
+        <h2>Event Teaser</h2>
+        <p>Watch our promotional video to see what's in store!</p>
+        <video controls poster="https://via.placeholder.com/700x400?text=TechNexus+2025+Teaser">
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <br>
+        <audio controls>
+            <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </section>
+
+    <section>
+        <h2>Registration Form</h2>
+        <form action="#" method="post" class="registration-form">
+            
+            <div class="form-group">
+                <label for="fname">Full Name</label>
+                <input type="text" id="fname" name="fname" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="example@mail.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="event-date">Preferred Session Date</label>
+                <input type="date" id="event-date" name="event-date" min="2025-01-01">
+            </div>
+
+            <div class="form-group">
+                <label for="tickets">Number of Tickets (1-5)</label>
+                <input type="number" id="tickets" name="tickets" min="1" max="5" value="1">
+            </div>
+
+            <div class="form-group">
+                <label for="tshirt">T-Shirt Size</label>
+                <select id="tshirt" name="tshirt">
+                    <option value="s">Small</option>
+                    <option value="m">Medium</option>
+                    <option value="l">Large</option>
+                    <option value="xl">Extra Large</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">Skill Level (Range)</label>
+                <input type="range" id="experience" name="experience" min="1" max="10">
+            </div>
+
+            <div class="form-group full-width">
+                <label for="comments">Any Special Requirements?</label>
+                <textarea id="comments" name="comments" rows="4"></textarea>
+            </div>
+
+            <button type="submit" class="full-width">Register Now</button>
+        </form>
+    </section>
+</div>
+
+</body>
+</html>
