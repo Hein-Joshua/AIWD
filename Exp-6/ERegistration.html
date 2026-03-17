@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .error-msg {
+            display: none;
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .success-msg {
+            display: none;
+            color: green;
+            font-size: 1.1em;
+            padding: 15px;
+            border-radius: 5px;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .btn-submit {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #218838;
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-reset {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #5a6268;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>📋 Event Registration</h1>
+        
+        <div class="success-msg" id="successMsg"></div>
+
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="participantName">Participant Name *</label>
+                <input type="text" id="participantName" placeholder="Enter your full name">
+                <div class="error-msg" id="nameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" placeholder="Enter your email">
+                <div class="error-msg" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="eventName">Event Name *</label>
+                <input type="text" id="eventName" placeholder="Event name" readonly>
+                <div class="error-msg" id="eventError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="mobileNumber">Mobile Number *</label>
+                <input type="tel" id="mobileNumber" placeholder="Enter 10-digit mobile number">
+                <div class="error-msg" id="mobileError"></div>
+            </div>
+
+            <div class="buttons">
+                <button type="submit" class="btn-submit" id="submitBtn">Submit</button>
+                <button type="reset" class="btn-reset" id="resetBtn">Reset</button>
+            </div>
+        </form>
+
+        <a href="event_management.html" class="back-link">← Back to Events</a>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Get event name from URL parameter
+            function getUrlParameter(name) {
+                const url = new URL(window.location);
+                return url.searchParams.get(name);
+            }
+
+            // Populate event name field
+            const eventName = getUrlParameter('event');
+            if (eventName) {
+                $('#eventName').val(decodeURIComponent(eventName));
+            }
+
+            // Reset button functionality
+            $('#resetBtn').click(function() {
+                $('#registrationForm')[0].reset();
+                $('.error-msg').hide().text('');
+                $('.success-msg').hide();
+                $('#submitBtn').prop('disabled', false).text('Submit');
+                $('input').css('border-color', '#ddd');
+            });
+
+            // Submit button functionality
+            $('#submitBtn').click(function(e) {
+                e.preventDefault();
+                
+                // Reset error messages
+                $('.error-msg').hide().text('');
+                $('input').css('border-color', '#ddd');
+                
+                // Get form values
+                const name = $('#participantName').val().trim();
+                const email = $('#email').val().trim();
+                const event = $('#eventName').val().trim();
+                const mobile = $('#mobileNumber').val().trim();
+                
+                let isValid = true;
+
+                // Validate Participant Name
+                if (name === '') {
+                    $('#nameError').text('Participant name is required').css('color', 'red').show();
+                    $('#participantName').css('border-color', 'red');
+                    isValid = false;
+                }
+
+                // Validate Email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (email === '') {
+                    $('#emailError').text('Email is required').css('color', 'red').show();
+                    $('#email').css('border-color', 'red');
+                    isValid = false;
+                } else if (!emailRegex.test(email)) {
+                    $('#emailError').text('Please enter a valid email').css('color', 'red').show();
+                    $('#email').css('border-color', 'red');
+                    isValid = false;
+                }
+
+                // Validate Event Name
+                if (event === '') {
+                    $('#eventError').text('Event name is required').css('color', 'red').show();
+                    isValid = false;
+                }
+
+                // Validate Mobile Number
+                const mobileRegex = /^\d{10,}$/;
+                if (mobile === '') {
+                    $('#mobileError').text('Mobile number is required').css('color', 'red').show();
+                    $('#mobileNumber').css('border-color', 'red');
+                    isValid = false;
+                } else if (!mobileRegex.test(mobile)) {
+                    $('#mobileError').text('Mobile number must be at least 10 digits').css('color', 'red').show();
+                    $('#mobileNumber').css('border-color', 'red');
+                    isValid = false;
+                }
+
+                // If all valid, show success message
+                if (isValid) {
+                    const successMessage = `<strong>✓ Registration Successful for ${name}!</strong><br>You are registered for ${event}`;
+                    $('#successMsg').html(successMessage).css('color', 'green').show();
+                    
+                    // Disable submit button and change text
+                    $('#submitBtn').prop('disabled', true).text('Registered');
+                    
+                    // Clear form after 2 seconds
+                    setTimeout(() => {
+                        $('#registrationForm')[0].reset();
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
